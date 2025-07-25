@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barrigas - Special Beers</title>
+    <!-- Importa fontes do Google Fonts para um visual moderno e legível -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset básico para garantir consistência entre navegadores */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos globais para o corpo da página */
+        body {
+            font-family: 'Montserrat', sans-serif; /* Fonte principal para o texto */
+            color: #333; /* Cor padrão do texto */
+            line-height: 1.6; /* Espaçamento entre linhas para melhor leitura */
+            background-color: #f4f4f4; /* Fundo suave da página */
+            overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+        }
+
+        /* Definição de Animações CSS para efeitos visuais */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes growScale {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Estilos para o Cabeçalho da Página (fixo no topo) */
+        header {
+            background-color: #2c3e50; /* Azul escuro, cor principal do cabeçalho */
+            color: #ecf0f1; /* Branco suave para o texto */
+            padding: 20px 40px; /* Preenchimento interno */
+            display: flex; /* Usa Flexbox para alinhamento de itens */
+            align-items: center; /* Alinha itens verticalmente ao centro */
+            justify-content: space-between; /* Distribui espaço entre os itens */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para profundidade */
+            position: fixed; /* Fixa o cabeçalho no topo da viewport */
+            width: 100%; /* Ocupa toda a largura */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
+            animation: fadeIn 1s ease-out; /* Animação de fade-in na carga da página */
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 60px; /* Altura do logo do pinguim */
+            margin-right: 15px; /* Espaçamento à direita do logo */
+            animation: growScale 0.8s ease-out; /* Animação de crescimento no logo */
+        }
+
+        .site-title h1 {
+            font-family: 'Oswald', sans-serif; /* Fonte destacada para o título principal */
+            font-size: 2.8em; /* Tamanho da fonte */
+            margin-bottom: 5px;
+            letter-spacing: 2px; /* Espaçamento entre letras */
+        }
+
+        .site-title p {
+            font-size: 1.1em;
+            color: #bdc3c7; /* Cor mais suave para o subtítulo */
+        }
+
+        /* Hero Section - A grande área de destaque inicial da página */
+        .hero-section {
+            position: relative; /* Para posicionar o fundo e o conteúdo */
+            height: 100vh; /* Ocupa a altura total da viewport */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff; /* Cor do texto branco */
+            overflow: hidden; /* Esconde qualquer conteúdo que transborde */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)); /* Escurece a imagem de fundo */
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* IMAGEM DO PINGUIM GORDO SEGURANDO UMA CERVEJA - SUBSTITUA ESTE URL! */
+            background-image: url('https://placehold.co/1920x1080/000/fff?text=Pinguim+Gordo+com+Cerveja');
+            background-size: cover; /* Garante que a imagem cubra toda a área */
+            background-position: center; /* Centraliza a imagem */
+            z-index: -1; /* Coloca a imagem atrás do conteúdo */
+            animation: fadeIn 2s ease-out; /* Animação de fade-in para a imagem de fundo */
+        }
+
+        /* Conteúdo principal dentro da Hero Section */
+        .hero-content {
+            z-index: 1; /* Garante que o conteúdo fique acima da imagem de fundo */
+            max-width: 800px; /* Largura máxima do conteúdo */
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente para o texto */
+            border-radius: 15px; /* Cantos arredondados */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+            animation: growScale 1s ease-out; /* Animação de crescimento para o card principal */
+        }
+
+        .hero-content h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra no texto para melhor leitura */
+            color: #f39c12; /* Laranja vibrante */
+        }
+
+        .hero-content p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-buttons .btn {
+            display: inline-block; /* Permite definir largura e altura */
+            background-color: #e67e22; /* Laranja mais escuro para os botões */
+            color: #fff;
+            padding: 15px 30px;
+            margin: 0 15px;
+            border-radius: 8px;
+            text-decoration: none; /* Remove sublinhado */
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave no hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-buttons .btn:hover {
+            background-color: #d35400; /* Laranja ainda mais escuro no hover */
+            transform: translateY(-5px) scale(1.05); /* Efeito de "levitar" e crescer */
+        }
+
+        /* Conteúdo Principal da Página (Cardápio, Informações, etc.) */
+        .main-content {
+            padding: 60px 40px;
+            max-width: 1200px; /* Largura máxima do conteúdo */
+            margin: 0 auto; /* Centraliza o conteúdo na página */
+            display: flex; /* Usa Flexbox para o layout lateral */
+            gap: 40px; /* Espaçamento entre o sidebar e a área de conteúdo */
+            position: relative; /* Para posicionar o menu lateral sticky */
+        }
+
+        /* Menu Lateral (Sidebar) */
+        .sidebar {
+            width: 280px; /* Largura fixa do sidebar */
+            flex-shrink: 0; /* Impede que o sidebar encolha */
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: slideInLeft 1s ease-out; /* Animação de slide-in da esquerda */
+            position: sticky; /* Menu lateral fixo ao rolar a página */
+            top: 100px; /* Ajusta a posição abaixo do cabeçalho fixo */
+            height: fit-content; /* Altura se ajusta ao conteúdo */
+        }
+
+        .sidebar h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f39c12; /* Linha laranja para destaque */
+            padding-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none; /* Remove marcadores de lista */
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            display: block; /* Ocupa toda a largura do item da lista */
+            background-color: #ecf0f1; /* Fundo suave para os itens do menu */
+            padding: 12px 15px;
+            border-radius: 5px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #bdc3c7; /* Cor de fundo no hover */
+            transform: translateX(5px); /* Efeito de slide para a direita no hover */
+        }
+
+        /* Área de Conteúdo Principal */
+        .content-area {
+            flex-grow: 1; /* Permite que a área de conteúdo ocupe o espaço restante */
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out; /* Animação de fade-in para as seções */
+        }
+
+        .section h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e67e22; /* Linha laranja para destaque */
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8em;
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+        }
+
+        .section ul {
+            list-style: disc; /* Marcador de lista padrão */
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section ol {
+            list-style: decimal; /* Marcador de lista numerado */
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* Cardápio de Cervejas em Grid */
+        .beer-menu {
+            display: grid; /* Usa Grid para o layout dos cards */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Colunas responsivas */
+            gap: 30px; /* Espaçamento entre os cards */
+            margin-top: 30px;
+        }
+
+        .beer-card {
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave no hover */
+            display: flex;
+            flex-direction: column; /* Conteúdo do card em coluna */
+        }
+
+        .beer-card:hover {
+            transform: translateY(-8px); /* Efeito de "levitar" no hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .beer-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover; /* Corta a imagem para preencher o espaço */
+            border-bottom: 1px solid #eee;
+        }
+
+        .beer-info {
+            padding: 20px;
+            flex-grow: 1; /* Permite que o conteúdo de texto ocupe espaço */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .beer-info h4 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .beer-info p {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 10px;
+            flex-grow: 1;
+        }
+
+        .beer-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #e67e22;
+        }
+
+        .beer-price {
+            font-size: 1.3em;
+            color: #27ae60; /* Verde para o preço */
+        }
+
+        .beer-button {
+            display: block;
+            width: 100%;
+            background-color: #3498db; /* Azul para o botão "Saiba Mais" */
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .beer-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        /* Rodapé da Página */
+        footer {
+            background-color: #1a1a1a; /* Fundo preto */
+            color: #ecf0f1;
+            padding: 60px 40px;
+            font-size: 0.95em;
+            border-top: 5px solid #f39c12; /* Linha laranja para destaque */
+            animation: fadeIn 1s ease-out;
+        }
+
+        .footer-columns {
+            display: flex;
+            flex-wrap: wrap; /* Permite que as colunas quebrem para a próxima linha */
+            justify-content: space-between;
+            gap: 30px; /* Espaçamento entre as colunas */
+            max-width: 1200px;
+            margin: 0 auto 40px auto; /* Centraliza e adiciona margem inferior */
+        }
+
+        .footer-column {
+            flex: 1; /* Permite que as colunas cresçam e encolham */
+            min-width: 250px; /* Largura mínima para as colunas */
+            margin-bottom: 20px;
+        }
+
+        .footer-column h4 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5em;
+            color: #f39c12;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #e67e22; /* Linha decorativa abaixo do título da coluna */
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #f39c12;
+            text-decoration: underline;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px; /* Espaçamento entre os ícones sociais */
+            margin-top: 20px;
+        }
+
+        .social-icons img {
+            height: 30px;
+            width: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons img:hover {
+            transform: scale(1.2); /* Efeito de zoom no hover */
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #333; /* Linha divisória */
+            color: #999;
+        }
+
+        /* Menu Harmonioso Abaixo do Rodapé (como abas) */
+        .footer-nav {
+            background-color: #333; /* Fundo mais escuro para o menu */
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3); /* Sombra superior */
+            margin-top: 40px; /* Espaço do conteúdo acima */
+        }
+
+        .footer-nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 25px; /* Espaçamento entre os itens do menu */
+        }
+
+        .footer-nav ul li a {
+            display: block;
+            padding: 15px 25px;
+            background-color: #555; /* Fundo dos botões do menu */
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer-nav ul li a:hover {
+            background-color: #f39c12; /* Laranja no hover */
+            transform: translateY(-5px); /* Efeito de "levitar" */
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Responsividade para diferentes tamanhos de tela */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column; /* Colunas empilham em telas menores */
+                padding: 40px 20px;
+            }
+
+            .sidebar {
+                width: 100%; /* Sidebar ocupa toda a largura */
+                position: static; /* Remove sticky em telas menores */
+                margin-bottom: 40px;
+            }
+
+            .footer-columns {
+                flex-direction: column;
+                align-items: center; /* Centraliza as colunas */
+            }
+
+            .footer-column {
+                min-width: unset;
+                width: 80%; /* Largura das colunas no rodapé */
+                text-align: center;
+            }
+
+            .footer-column h4::after {
+                left: 50%; /* Centraliza a linha decorativa */
+                transform: translateX(-50%);
+            }
+
+            .footer-nav ul {
+                flex-wrap: wrap; /* Itens do menu do rodapé quebram linha */
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px 20px;
+            }
+
+            .logo-container {
+                margin-bottom: 15px;
+            }
+
+            .site-title h1 {
+                font-size: 2.2em;
+            }
+
+            .site-title p {
+                font-size: 1em;
+            }
+
+            /* Esconde o menu de navegação superior, já que temos o do rodapé */
+            nav ul {
+                display: none;
+            }
+
+            .hero-content {
+                padding: 20px;
+            }
+
+            .hero-content h2 {
+                font-size: 2.5em;
+            }
+
+            .hero-content p {
+                font-size: 1.1em;
+            }
+
+            .hero-buttons .btn {
+                padding: 12px 20px;
+                font-size: 1em;
+                margin: 10px 5px;
+            }
+
+            .section h2 {
+                font-size: 2em;
+            }
+
+            .section h3 {
+                font-size: 1.5em;
+            }
+
+            .beer-menu {
+                grid-template-columns: 1fr; /* Uma coluna para os cards de cerveja */
+            }
+
+            .footer-nav ul li a {
+                padding: 12px 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h2 {
+                font-size: 2em;
+            }
+
+            .hero-content p {
+                font-size: 0.9em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <!-- Ícone do Pinguim Gordo - SUBSTITUA ESTE URL PELA SUA IMAGEM REAL! -->
+            <img src="https://placehold.co/60x60/2c3e50/ecf0f1?text=Pinguim" alt="Logo Barrigas Pinguim">
+            <div class="site-title">
+                <h1>BARRIGAS - SPECIAL BEERS</h1>
+                <p>Cervejas e Vinhos Especiais</p>
+            </div>
+        </div>
+        <!-- O menu de navegação principal está oculto, pois o menu harmonioso do rodapé é o foco -->
+        <nav style="display: none;">
+            <ul>
+                <li><a href="#cervejas">Cervejas</a></li>
+                <li><a href="#vinhos">Vinhos</a></li>
+                <li><a href="#sobre-nos">Sobre Nós</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-background"></div>
+            <div class="hero-content">
+                <h2>O Sabor da Excelência em Cada Gole!</h2>
+                <p>
+                    Descubra o universo das cervejas especiais na Barrigas. Das consagradas cervejarias belgas e alemãs, às inovadoras produções artesanais do Brasil e EUA, selecionamos o que há de melhor para você.
+                    Explore maltes únicos, lúpulos aromáticos e fermentações surpreendentes que transformam cada degustação em uma experiência inesquecível.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#cardapio" class="btn">Nosso Cardápio</a>
+                    <a href="#sobre-nos" class="btn">Conheça Nossa História</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <h3>Categorias Barrigas</h3>
+                <ul>
+                    <li><a href="#historia-cerveja">História da Cerveja</a></li>
+                    <li><a href="https://pt.wikipedia.org/wiki/Estilos_de_cerveja" target="_blank">Estilos de Cerveja</a></li>
+                    <li><a href="#fornecedores-internacionais">Fornecedores Internacionais</a></li>
+                    <li><a href="#fornecedores-nacionais">Fornecedores Nacionais</a></li>
+                    <li><a href="#processo-producao">Processo de Produção</a></li>
+                    <li><a href="#dicas-harmonizacao">Dicas de Harmonização</a></li>
+                    <li><a href="#eventos-barrigas">Eventos Barrigas</a></li>
+                </ul>
+            </aside>
+
+            <div class="content-area">
+                <section id="cardapio" class="section">
+                    <h2>Nosso Cardápio de Cervejas Especiais</h2>
+                    <p>Uma seleção cuidadosa das melhores cervejas do mundo, para todos os paladares.</p>
+
+                    <div class="beer-menu">
+                        <!-- Cerveja 1: Chimay Bleue (Bélgica) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/2c3e50/ecf0f1?text=Chimay+Bleue" alt="Chimay Bleue">
+                            <div class="beer-info">
+                                <h4>Chimay Bleue (Bélgica)</h4>
+                                <p>Cerveja trapista escura forte, aromas complexos de frutas escuras, caramelo e especiarias. Ideal para momentos especiais.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 9%</span>
+                                    <span class="beer-price">R$ 45,90</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+
+                        <!-- Cerveja 2: Weihenstephaner Vitus (Alemanha) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/e67e22/ecf0f1?text=Weihenstephaner+Vitus" alt="Weihenstephaner Vitus">
+                            <div class="beer-info">
+                                <h4>Weihenstephaner Vitus (Alemanha)</h4>
+                                <p>Weizenbock dourada, notas de banana e cravo, corpo encorpado e refrescante. Uma das melhores do mundo.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 7.7%</span>
+                                    <span class="beer-price">R$ 38,50</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+
+                        <!-- Cerveja 3: Dogfish Head 90 Minute IPA (EUA) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/3498db/ecf0f1?text=Dogfish+Head+90+Min+IPA" alt="Dogfish Head 90 Minute IPA">
+                            <div class="beer-info">
+                                <h4>Dogfish Head 90 Minute IPA (EUA)</h4>
+                                <p>Imperial IPA intensamente lupulada, com balanço perfeito entre amargor e doçura. Um clássico moderno.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 9%</span>
+                                    <span class="beer-price">R$ 52,00</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+
+                        <!-- Cerveja 4: Brooklyn Lager (EUA) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/27ae60/ecf0f1?text=Brooklyn+Lager" alt="Brooklyn Lager">
+                            <div class="beer-info">
+                                <h4>Brooklyn Lager (EUA)</h4>
+                                <p>Lager âmbar clássica, com notas de malte caramelo e lúpulos florais. Leve e saborosa.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 5.2%</span>
+                                    <span class="beer-price">R$ 28,00</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+
+                        <!-- Cerveja 5: Colorado Appia (Brasil) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/8e44ad/ecf0f1?text=Colorado+Appia" alt="Colorado Appia">
+                            <div class="beer-info">
+                                <h4>Colorado Appia (Brasil)</h4>
+                                <p>Cerveja de trigo com mel, levemente adocicada e refrescante. O toque brasileiro com qualidade artesanal.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 5.5%</span>
+                                    <span class="beer-price">R$ 25,90</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+
+                        <!-- Cerveja 6: Fuller's London Pride (Inglaterra) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/f1c40f/ecf0f1?text=Fuller's+London+Pride" alt="Fuller's London Pride">
+                            <div class="beer-info">
+                                <h4>Fuller's London Pride (Inglaterra)</h4>
+                                <p>Classic English Pale Ale, com equilíbrio entre malte e lúpulo, notas frutadas e um final seco.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 4.7%</span>
+                                    <span class="beer-price">R$ 32,00</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+
+                        <!-- Cerveja 7: Goose Island IPA (EUA) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/95a5a6/ecf0f1?text=Goose+Island+IPA" alt="Goose Island IPA">
+                            <div class="beer-info">
+                                <h4>Goose Island IPA (EUA)</h4>
+                                <p>Uma IPA americana com notas cítricas e florais, amargor médio e final limpo.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 5.9%</span>
+                                    <span class="beer-price">R$ 30,50</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+
+                        <!-- Cerveja 8: Duvel (Bélgica) -->
+                        <div class="beer-card">
+                            <img src="https://placehold.co/400x200/d35400/ecf0f1?text=Duvel" alt="Duvel">
+                            <div class="beer-info">
+                                <h4>Duvel (Bélgica)</h4>
+                                <p>Strong Golden Ale belga, brilhante, seca e com um final de lúpulo marcante. Um ícone.</p>
+                                <div class="beer-details">
+                                    <span>ABV: 8.5%</span>
+                                    <span class="beer-price">R$ 49,90</span>
+                                </div>
+                                <a href="#" class="beer-button">Saiba Mais</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="historia-cerveja" class="section">
+                    <h2>A Fascinante História da Cerveja</h2>
+                    <p>
+                        A cerveja é uma das bebidas mais antigas e consumidas do mundo, com uma história que remonta a milhares de anos.
+                        Registros arqueológicos sugerem que a fabricação de cerveja começou no Neolítico, com evidências de bebidas fermentadas de grãos na Mesopotâmia e no Egito antigo.
+                    </p>
+                    <p>
+                        Ao longo dos séculos, a cerveja evoluiu de uma bebida básica de subsistência para uma forma de arte, com culturas desenvolvendo estilos únicos e técnicas de produção refinadas.
+                        Monges medievais na Europa foram cruciais para a preservação e inovação da cervejaria, e o Reinheitsgebot alemão (Lei da Pureza da Cerveja de 1516) estabeleceu padrões de ingredientes que influenciam até hoje.
+                    </p>
+                    <h3>Marcos Importantes:</h3>
+                    <ul>
+                        <li>**6000 a.C.:** Indícios mais antigos de produção de cerveja na Mesopotâmia.</li>
+                        <li>**1800 a.C.:** Hino a Ninkasi (deusa suméria da cerveja), receita detalhada da cerveja.</li>
+                        <li>**Século IX:** Conventos na Europa começam a aprimorar a produção.</li>
+                        <li>**1516:** Reinheitsgebot, a Lei da Pureza Alemã, estabelece o uso de água, malte de cevada e lúpulo.</li>
+                        <li>**Século XIX:** Louis Pasteur descobre o papel das leveduras na fermentação. Revolução industrial e surgimento das grandes cervejarias.</li>
+                    </ul>
+                </section>
+
+                <section id="fornecedores-internacionais" class="section">
+                    <h2>Nossos Fornecedores Internacionais</h2>
+                    <p>A Barrigas tem orgulho de trabalhar com os mais renomados fornecedores de cervejas especiais do mundo, garantindo a autenticidade e a qualidade que você merece.</p>
+                    <h3>Principais Países Produtores e Marcas:</h3>
+                    <ul>
+                        <li>**Bélgica:** Considerada o berço das cervejas especiais.
+                            <ul>
+                                <li>**Chimay:** Cerveja trapista icônica, produzida por monges.</li>
+                                <li>**Duvel Moortgat:** Famosa pela Duvel, uma Strong Golden Ale.</li>
+                                <li>**Rochefort:** Outra renomada cervejaria trapista.</li>
+                                <li>**Cantillon:** Referência em Lambics e Gueuzes ácidas e complexas.</li>
+                            </ul>
+                        </li>
+                        <li>**Alemanha:** Conhecida por sua tradição e Lei da Pureza.
+                            <ul>
+                                <li>**Weihenstephaner:** A cervejaria mais antiga do mundo em atividade.</li>
+                                <li>**Schneider Weisse:** Excelência em cervejas de trigo.</li>
+                                <li>**Ayinger:** Tradicionais cervejas bávaras de alta qualidade.</li>
+                            </ul>
+                        </li>
+                        <li>**Estados Unidos:** Líderes na revolução da cerveja artesanal.
+                            <ul>
+                                <li>**Dogfish Head:** Conhecida por inovações e cervejas extremas.</li>
+                                <li>**Stone Brewing:** Famosa por suas IPAs agressivas e ousadas.</li>
+                                <li>**Sierra Nevada:** Pioneira no movimento craft, com a Pale Ale.</li>
+                            </ul>
+                        </li>
+                        <li>**Inglaterra:** Berço de diversos estilos clássicos como Pale Ale e Stout.
+                            <ul>
+                                <li>**Fuller's:** Conhecida por suas ales tradicionais como London Pride.</li>
+                                <li>**Samuel Smith's:** Mantém a tradição com cervejas clássicas.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="fornecedores-nacionais" class="section">
+                    <h2>Nossos Fornecedores Nacionais</h2>
+                    <p>O Brasil tem se destacado na produção de cervejas artesanais de alta qualidade, e a Barrigas apoia e distribui o melhor do nosso país.</p>
+                    <h3>Cervejarias Nacionais Parceiras:</h3>
+                    <ul>
+                        <li>**Colorado (Ribeirão Preto, SP):** Pioneira e conhecida por incorporar ingredientes brasileiros como rapadura e café.</li>
+                        <li>**Cervejaria Wäls (Belo Horizonte, MG):** Famosa por suas Belgian Ales e parcerias inovadoras.</li>
+                        <li>**Dama Bier (Piracicaba, SP):** Qualidade e diversidade de estilos, com foco em lagers e ales.</li>
+                        <li>**Way Beer (Pinhais, PR):** Conhecida por suas cervejas ousadas e experimentais.</li>
+                        <li>**Lohn Bier (Lauro Müller, SC):** Premiada cervejaria do sul, com forte influência alemã.</li>
+                    </ul>
+                </section>
+
+                <section id="sobre-nos" class="section">
+                    <h2>Sobre a Barrigas - Special Beers</h2>
+                    <p>
+                        A **Barrigas - Special Beers** nasceu da paixão por cervejas e vinhos de qualidade. Acreditamos que cada garrafa conta uma história, e nosso objetivo é compartilhar essas histórias com você.
+                        Desde a nossa fundação em 20XX, nos dedicamos a selecionar cuidadosamente os melhores rótulos, buscando a excelência tanto em produções internacionais quanto nas emergentes cervejarias artesanais brasileiras.
+                    </p>
+                    <p>
+                        Nosso mascote, o pinguim Barrigas, simboliza nossa filosofia: apreciar a vida com bom humor, sem pressa, desfrutando de cada gole de uma bebida excepcional.
+                        Somos mais do que uma distribuidora; somos curadores de experiências, promovendo a cultura cervejeira e vinícola através de degustações, eventos e informações.
+                    </p>
+                    <h3>Nossa Missão:</h3>
+                    <p>Oferecer uma seleção incomparável de cervejas e vinhos especiais, com atendimento personalizado e conhecimento aprofundado, para enriquecer a experiência de nossos clientes.</p>
+                    <h3>Nossa Visão:</h3>
+                    <p>Ser a referência no mercado de bebidas especiais, reconhecida pela qualidade dos produtos, inovação e paixão pelo que fazemos.</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-columns">
+            <div class="footer-column">
+                <h4>Barrigas - Special Beers</h4>
+                <ul>
+                    <li><a href="#sobre-nos">Nossa História</a></li>
+                    <li><a href="#cardapio">Nosso Cardápio</a></li>
+                    <li><a href="#eventos-barrigas">Eventos</a></li>
+                    <li><a href="#">Trabalhe Conosco</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Úteis</h4>
+                <ul>
+                    <li><a href="#">Política de Privacidade</a></li>
+                    <li><a href="#">Termos de Uso</a></li>
+                    <li><a href="#">Perguntas Frequentes</a></li>
+                    <li><a href="#">Mapa do Site</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <p>Rua da Cerveja, 123 - Centro<br>Osasco, SP - Brasil</p>
+                <p>Telefone: (11) 99999-8888</p>
+                <p>Email: contato@barrigasbeers.com.br</p>
+                <div class="social-icons">
+                    <!-- Ícones de redes sociais - SUBSTITUA ESTES URLS PELAS SUAS IMAGENS REAIS! -->
+                    <a href="https://facebook.com/barrigasbeers" target="_blank"><img src="https://placehold.co/30x30/1a1a1a/ecf0f1?text=FB" alt="Facebook"></a>
+                    <a href="https://instagram.com/barrigasbeers" target="_blank"><img src="https://placehold.co/30x30/1a1a1a/ecf0f1?text=IG" alt="Instagram"></a>
+                    <a href="https://twitter.com/barrigasbeers" target="_blank"><img src="https://placehold.co/30x30/1a1a1a/ecf0f1?text=TW" alt="Twitter"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <ul>
+                <li><a href="#cardapio">Cervejas Especiais</a></li>
+                <li><a href="#">Vinhos Premium</a></li>
+                <li><a href="#fornecedores-internacionais">Nossos Fornecedores</a></li>
+                <li><a href="#sobre-nos">Sobre a Barrigas</a></li>
+                <li><a href="#">Fale Conosco</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Barrigas - Special Beers. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
